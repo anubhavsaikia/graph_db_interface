@@ -13,3 +13,8 @@ Utkarsh Agarwal
 Arjun Kashettiwar
 
 To check if code is working or not check console for outputs
+
+Username for login page - "Anubhav" or "Utkarsh" or "Rhushabh" or "Arjun"
+
+Password for login page - "graph"
+
