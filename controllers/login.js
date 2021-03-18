@@ -19,7 +19,11 @@ exports.post_test = (req,res,next) => {
     console.log(username);
     console.log(password);
     console.log(action);
-    if(action=="login")
+    if((username=="Anubhav" || username=="Utkarsh" || username=="Rhushabh" || username=="Arjun") && password == "graph")
+    {
+        res.redirect('/recs');
+    }
+    else if(action=="login")
     {
         res.redirect('/login/?error=1');
     }
@@ -30,7 +34,7 @@ exports.post_test = (req,res,next) => {
     else 
     {
         res.redirect('/login/?error=0');
-    }
+    } 
     
 
 };

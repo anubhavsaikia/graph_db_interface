@@ -1,9 +1,8 @@
 
-module.exports = class Prod {
+module.exports = class Recs {
 
-    constructor(title, image, price, quantity) {
+    constructor(title) {
         this.title = title;
-        this.image = image;
     }
 
     static get_all(){
