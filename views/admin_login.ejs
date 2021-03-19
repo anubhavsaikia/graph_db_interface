@@ -6,8 +6,8 @@
 <body>
 
 <main>
-    <h1>Login</h1>
-    <form class="product-form" action="/login" method="POST">
+    <h1>Admin Login</h1>
+    <form class="product-form" action="http://localhost:3000/admin_login" method="POST">
         <div class="form-control">
             <label for="username">Username</label>
             <input type="text" name="username" id="title">
@@ -24,21 +24,5 @@
     <% if(error=='1'){ %><h3>Username or Password is incorrect</h3> <% };%>
     <br> <br> <br> <br>
 
-
-    <h1>Sign Up if not an existing user</h1>
-    <form class="product-form" action="/sign_up" method="POST">
-        <div class="form-control">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="title">
-        </div>
-        <div class="form-control">
-            <label for="password">Password</label>
-            <input type="text" name="password" id="image">
-        </div>
-        <input type="hidden" value="signup" name="action">
-        <button class="btn" type="submit">Sign Up</button>
-    </form>
-
-    <% if(error=='2'){ %><h3>Sorry, can't sign up now. We'll change this</h3> <% };%>
 
 </main>

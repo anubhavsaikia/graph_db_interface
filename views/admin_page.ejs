@@ -1,0 +1,19 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/main.css">
+    </head>
+
+    <body>
+
+            <main>
+               <h1>Admin Page</h1>
+               <h3>Welcome <%= admin_user %> </h3>
+               <br><br><br>
+            <form action="/admin_logout" method="POST">
+                <button class="btn" type="submit">
+                    Logout
+                </button>
+            </form>
+            </main>
+            <%- include('./includes/end.ejs') %>

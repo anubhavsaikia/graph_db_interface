@@ -7,6 +7,9 @@
     <body>
 
             <main>
+                <h3>Username : <%= username %></h3>
+                <input type="hidden" name="username" value = <%= username %> >
+                <br><br><br>
                 <form action="http://localhost:3000/recs" method="POST">
                 <div class="grid">
                     
@@ -35,6 +38,13 @@
                     <button class="btn" type="submit">
                         Submit
                     </button>
+                </center>
+            </form>
+<br><br><br>
+            <form action="/logout" method="POST">
+                <button class="btn" type="submit">
+                    Logout
+                </button>
             </form>
             </main>
             <%- include('./includes/end.ejs') %>

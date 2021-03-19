@@ -1,20 +1,27 @@
 # graph_db_interface
 
-Database based on graph and a recommendation system using it 
+We use a graph database to recommend movies
 
 # Collaborators
 
 Anubhav Saikia
 
-Rhushabh Gedam
-
 Utkarsh Agarwal
+
+Rhushabh Gedam
 
 Arjun Kashettiwar
 
-To check if code is working or not check console for outputs
+# Notes
 
-Username for login page - "Anubhav" or "Utkarsh" or "Rhushabh" or "Arjun"
+login username - "Anubhav" or "Utkarsh" or "Rhushabh" or "Arjun"
 
-Password for login page - "graph"
+login Password - "graph"
 
+Sign up disabled right now
+
+Admin login and Admin password same as above
+
+link to get to login page - http://localhost:3000/login
+
+link to get to admin login page - http://localhost:3000/admin_login
