@@ -21,6 +21,9 @@
   "homepage": "https://github.com/anubhavsaikia/graph_db_interface#readme",
   "dependencies": {
     "ejs": "^3.1.6",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "neo4j-driver": "*",
+    "body-parser": "*",
+    "morgan": "*"
   }
 }
