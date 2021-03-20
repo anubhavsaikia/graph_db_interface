@@ -3,32 +3,49 @@
      --nodes=Name=names.csv
      --nodes=Genre=genre.csv
      --nodes=Tag=tag.csv
+     --nodes=Decade=decades.csv
      --nodes=Prod_Company=prod_company.csv
-     --relationships=ACTOR_IN="actor.csv"
-     --relationships=ACTRESS_IN="actress.csv"
-     --relationships=DIRECTOR_IN="director.csv"
-     --relationships=PRODUCER_IN="producer.csv"
+     --relationships=ACTOR_IN="movie_persons_header.csv,actor.csv"
+     --relationships=ACTRESS_IN="movie_persons_header.csv,actress.csv"
+     --relationships=DIRECTOR_IN="movie_persons_header.csv,director.csv"
+     --relationships=PRODUCER_IN="movie_persons_header.csv,producer.csv"
+     --relationships=WRITER_IN="movie_persons_header.csv,writer.csv"
+     --relationships=EDITOR_IN="movie_persons_header.csv,editor.csv"
+     --relationships=ARCHIVE_FOOTAGE_IN="movie_persons_header.csv,archive_footage.csv"
+     --relationships=ARCHIVE_SOUND_IN="movie_persons_header.csv,archive_sound.csv"
+     --relationships=CINEMATOGRAPHER_IN="movie_persons_header.csv,cinematographer.csv"
+     --relationships=COMPOSER_IN="movie_persons_header.csv,composer.csv"
+     --relationships=PRODUCTION_DESIGNER_IN="movie_persons_header.csv,production_designer.csv"
      --relationships=HAS_GENRE="has_genre.csv"
+     --relationships=IN_DECADE="movie_decade.csv"
      --relationships=HAS_TAG="has_tag.csv"
-     --relationships=PRODUCED_BY="produced_by.csv"
+     --relationships=PRODUCES="produced_by.csv"
 
+# # All Nodes
 
-movies.csv(movieid:ID(movieId), title, year, duration, country, language, description, avg_votes, combo_of_categories)
-prod_company(comp_id:ID(compId), comp_name)
-names.csv(nameid:ID(nameId), name, dob, dod, bio, height)
-genre.csv(genre:ID(genreId), genrename)
-tag.csv(tagId:ID(tagId), tagname)
+# movies.csv(:IGNORE, movieid:ID(movieId), title, year, duration, country, language, description, avg_votes, combo_of_categories)
+# prod_company(:IGNORE, comp_name:ID(comp))
+# names.csv(:IGNORE, nameid:ID(nameId), name, dob, dod, bio, height)
+# genre.csv(:IGNORE, genre:ID(genre))
+# tag.csv(:IGNORE, tagId:ID(tagId), tagname)
+# decades.csv(:IGNORE,decade:ID(decade))
 
-# order.csv(movieid, ordering, nameid, category)
+# # order.csv(movieid, ordering, nameid, category)
 
-actor.csv(:END_ID(movieId), ordering, :START_ID(nameId))
-actress.csv(:END_ID(movieId), ordering, :START_ID(nameId))
-director.csv(:END_ID(movieId), ordering, :START_ID(nameId))
-producer.csv(:END_ID(movieId), ordering, :START_ID(nameId))
-...
-has_genre(:START_ID(movieId), :END_ID(genreId))
-has_tag(:START_ID(movieId), :END_ID(tagId), relevance)
-produced_by(:START_ID(compId), :END_ID(movieId))
+# # Category Relationships
+# :IGNORE, :END_ID(movieId), ordering, :START_ID(nameId)
+# actor.csv
+# actress.csv
+# director.csv
+# producer.csv
+# ...
 
-# ratings.csv(userd, :END_ID(movieId), rating)
+# # Other Relationships
+
+# has_genre(:IGNORE, :START_ID(movieId), :END_ID(genre))
+# has_tag(:IGNORE, :START_ID(movieId), :END_ID(tagId), relevance)
+# produces(:IGNORE, :END_ID(movieId),:START_ID(comp))
+# in_decade(:IGNORE, :START_ID(movieId), :END_ID(decade))
+
+# # ratings.csv(userd, :END_ID(movieId), rating)
 
