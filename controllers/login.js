@@ -15,8 +15,10 @@ exports.sign_up = (req,res,next) => {
 
     const username = req.body.username;
     const password = req.body.password;
+    const age = req.body.age;
     console.log(username);
     console.log(password);
+    console.log(age);
     res.redirect('/login/?error=2');
 
 };
