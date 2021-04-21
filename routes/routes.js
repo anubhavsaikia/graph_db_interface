@@ -1,48 +1,46 @@
 const path = require('path');
 const express = require('express');
-
-const routes = require('../controllers');
-
+const con = require('../controllers');
 const router = express.Router();
 
 // login page
-router.get('/login', routes.login.get_test);
-router.post('/login', routes.login.login);
-router.post('/sign_up', routes.login.sign_up);
+router.get('/login', con.login.get_test);
+router.post('/login', con.login.login);
+router.post('/sign_up', con.login.sign_up);
 //
 
 // home page
-router.get('/home', routes.home.get_home);
-router.post('/friend', routes.home.post_search_friend);
-router.post('/follow', routes.home.post_follow_toggle);
+router.get('/home', con.home.get_home);
+router.post('/friend', con.home.post_search_friend);
+router.post('/follow', con.home.post_follow_toggle);
 // 
 
 // recommendations page
-router.get('/recs', routes.recs.get_recs);
-router.post('/submit', routes.recs.post_submit);
-router.post('/get_recs', routes.recs.post_get_more);
+router.get('/recs', con.recs.get_recs);
+router.post('/submit', con.recs.post_submit);
+router.post('/get_recs', con.recs.post_get_more);
 // 
 
 // movie details
-router.get('/movie', routes.movie.get_movie);
-router.post('/movie_search', routes.movie.post_search);
-router.post('/movie_rate', routes.movie.post_rate);
+router.get('/movie', con.movie.get_movie);
+router.post('/movie_search', con.movie.post_search);
+router.post('/movie_rate', con.movie.post_rate);
 // 
 
 // // recommendations page function mappings
-// router.get('/recs', routes.recs.get_recommendations);
-// router.post('/recs', routes.recs.post_data);
-// router.post('/logout',routes.recs.logout);
+// router.get('/recs', con.recs.get_recommendations);
+// router.post('/recs', con.recs.post_data);
+// router.post('/logout',con.recs.logout);
 //
 
 // // admin login page function mappings
-// router.get('/admin_login', routes.admin_login.get_test);
-// router.post('/admin_login', routes.admin_login.login);
+// router.get('/admin_login', con.admin_login.get_test);
+// router.post('/admin_login', con.admin_login.login);
 // //
 
 // // admin page function mappings
-// router.get('/admin_page', routes.admin_page.get_test);
-// router.post('/admin_logout',routes.admin_page.logout)
+// router.get('/admin_page', con.admin_page.get_test);
+// router.post('/admin_logout',con.admin_page.logout)
 // //
 
 module.exports = router;
