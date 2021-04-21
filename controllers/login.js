@@ -1,17 +1,15 @@
-const login = require('../models/login');
+const login = require('../models/movie');
 
-exports.get_test = (req,res,next) => {
+exports.get_login = (req,res,next) => {
 
     res.render('login', {
         pageTitle: 'Login or Sign Up',
         path: '/login',
         error: req.query.error
-
-
     });
 };
 
-exports.sign_up = (req,res,next) => {
+exports.sign_up = (req,res2,next) => {
 
     const username = req.body.username;
     const password = req.body.password;
@@ -19,26 +17,43 @@ exports.sign_up = (req,res,next) => {
     console.log(username);
     console.log(password);
     console.log(age);
-    res.redirect('/login/?error=2');
-
+    const user_signup = new login.sign_up(username, password);
+    const ret = user_signup.check_uniqueness()
+        .then(res => {
+            if(res.rows.length==0){
+                user_signup.add_user()
+                    .then(res => {
+                        req.session.user = username;
+                        console.log("added user to db");
+                        res2.redirect('/home/?username='+username);
+                    })
+            }
+            else{
+                res2.redirect('/login/?error=2');
+            }
+        })
+    // check_uniqueness, add_user
 };
 
-exports.login = (req,res,next) => {
+exports.login = (req,res2,next) => {
     const username = req.body.username;
     const password = req.body.password;
     console.log(username);
     console.log(password);
-    
-    if((username=="Anubhav" || username=="Utkarsh" || username=="Rhushabh" || username=="Arjun") && password == "graph")
-    {
-        req.session.user = username;
-        res.redirect('/recs/?username='+username);
-        
-    }
-    else
-    {
-        res.redirect('/login/?error=1');
-    }
+    // verify_login
+    const user_login = new login.login(username, password);
+    const ret = user_login.verify_login()
+        .then(res => {
+            if(res.rows.length==0){
+                req.session.user = username;
+                console.log("user login successful");
+                res2.redirect('/home/?username='+username);
+            }
+            else{
+                res2.redirect('/login/?error=1');
+            }
+        })
+
 };
 
 
