@@ -18,7 +18,7 @@ class Login{
     check_uniqueness(){
         // check uniqueness of username
         return sess.run("match (u:User {username:$1}) \
-                        return count(u) = 1;", [this.username]);
+                        return count(u) = 0;", [this.username]);
     }
     add_user(){
         // add user node to db

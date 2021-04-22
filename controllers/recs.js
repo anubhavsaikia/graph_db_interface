@@ -66,7 +66,7 @@ exports.post_get_more = (req,res,next) =>{
 
 
 
-// exports.post_get_more = (req,res,next) =>{
+// exports.logout = (req,res,next) =>{
 //     // update_recs
 //     // get_more ????
 //     req.session.user = undefined;

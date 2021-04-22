@@ -5,6 +5,4 @@ module.exports = class login {
         this.username = username;
         this.password = password;
     }
-
-   
 };
