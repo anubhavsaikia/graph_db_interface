@@ -1,27 +1,17 @@
-
-// const { SESSION_EXPIRED } = require('neo4j-driver/types/error');
-// const { movie } = require('../controllers');
 const sess= require('../utils/database');
 
 class Login{
     constructor(username, name, password, age, gender){
-        this.username = username;
-        this.name = name;
-        this.password = password;
-        this.age = age;
-        this.gender = gender;
-        this.parameters = {"username":username, "password":password, "name":name, "gender":gender, "age":age};
+        this.parameters = {"username":username, 
+                            "password":password, 
+                            "name":name, 
+                            "gender":gender, 
+                            "age":age};
     }
     verify_login(){
         // can use await
         return sess.run("match (u:User {username:$username, password:$password}) \
-                        return count(u) = 1;", this.parameters);
-        // return sess.run("match (u:User {username:'Utkarsh', password:'asdfghj'}) \
-        //                 return count(u) = 1;");
-        // Query query = new Query("match (u:User {username:$1, password:$2}) \
-        //                     return count(u) = 1;");
-        // Result result = session.run(query.withParameters(Values.parameters("myNameParam", "Bob")));
-        
+                        return count(u) = 1;", this.parameters);       
     }
     check_uniqueness(){
         // check uniqueness of username
@@ -36,103 +26,111 @@ class Login{
 
 class User{
     constructor(username){
-        this.username = username;
+        this.parameters = {"username":username};
     }
     fetch_info(){
-        return sess.run("match (u:User {username:$1}) return u;", [this.username]);
+        return sess.run("match (u:User {username:$username}) return u;", this.parameters);
     }
     get_liked_movies(){
         // return all movies linked by an edge
-        return sess.run("match (:User {username:$1})-[:LIKES]->(m:Movie) \
-                        return m;", [this.username]);
+        return sess.run("match (:User {username:$username})-[:LIKES]->(m:Movie) \
+                        return m;", this.parameters);
     }
     get_disliked_movies(){
-        return sess.run("match (:User {username:$1})-[:DISLIKES]->(m:Movie) \
-                        return m;", [this.username]);
+        return sess.run("match (:User {username:$username})-[:DISLIKES]->(m:Movie) \
+                        return m;", this.parameters);
     }
     get_followers(){
-        return sess.run("match (u:User)-[:FOLLOWS]->(:User {username:$1}) \
-                        return u;", [this.username]);
+        return sess.run("match (u:User)-[:FOLLOWS]->(:User {username:$username}) \
+                        return u;", this.parameters);
     }
     get_following(){
-        return sess.run("match (:User {username:$1})-[:FOLLOWS]->(u:User) \
-                        return u;", [this.username]);
+        return sess.run("match (:User {username:$username})-[:FOLLOWS]->(u:User) \
+                        return u;", this.parameters);
     }
     get_all_users(){
         return sess.run("match (u:User) return u;");
     }
     get_rating(movieid){
-        return sess.run("match (:User {username:$1})-[e]->(:Movie) \
-                        return type(e) = \"LIKES\";", [this.username, movieid]);
+        this.parameters["movieid"] = movieid;
+        return sess.run("match (:User {username:$username})-[e]->(m:Movie {movieid:$movieid}) \
+                        return type(e) = \"LIKES\";", this.parameters);
     }
     update_rating(movieid, rating){
+        this.parameters["movieid"] = movieid;
         if (rating == 1){
-            return sess.run("match (u:User {username:$1}), (m:Movie {movieid:$2}) \
+            return sess.run("match (u:User {username:$username}), (m:Movie {movieid:$movieid}) \
                             merge (u)-[:LIKES]->(m) \
-                            return u;", [this.username, movieid]);
+                            return u;", this.parameters);
         } else{
-            return sess.run("match (u:User {username:$1}), (m:Movie {movieid:$2}) \
+            return sess.run("match (u:User {username:$username}), (m:Movie {movieid:$movieid}) \
                             merge (u)-[:DISLIKES]->(m) \
-                            return u;", [this.username, movieid]);
+                            return u;", this.parameters);
         }
     }
 }
 
 class Movie{
     constructor(movieid){
-        this.movieid = movieid;
+        this.parameters = {"movieid":movieid};
     }
     get_all_movies(){
         return sess.run("match (m:Movie) return m;");
     }
     fetch_movie(){
-        return sess.run("match (m:Movie {movieid:$1}) return m", [this.movieid]);
+        return sess.run("match (m:Movie {movieid:$movieid}) return m", this.parameters);
     }
 }
 
 class Friends{
     constructor(username){
-        this.username = username;
+        this.parameters = {"username":username};
     }
     fetch_info(f_username){
-        return sess.run("match (u:User {username:$1}) return u", [f_username]);
+        this.parameters["f_username"] = f_username;
+        return sess.run("match (u:User {username:$f_username}) return u", this.parameters);
     }
     is_following(f_username){
-        return sess.run("match p = (:User {username:$2})-[:FOLLOWS]->(:User {username:$1}) \
-                        return exists(p);", [this.username, f_username]);
+        this.parameters["f_username"] = f_username;
+        return sess.run("match p = (:User {username:$f_username})-[:FOLLOWS]->(:User {username:$username}) \
+                        return exists(p);", this.parameters);
     }
     follow(f_username){
-        return sess.run("match (u:User {username:$1}), (f:User {username:$2}) \
+        this.parameters["f_username"] = f_username;
+        return sess.run("match (u:User {username:$username}), (f:User {username:$f_username}) \
                         merge (u)-[:FOLLOWS]->(f) \
                         return u;", [this.username, f_username]);
     }
     unfollow(f_username){
-        return sess.run("match (u:User {username:$1}), (f:User {username:$2}) \
+        this.parameters["f_username"] = f_username;
+        return sess.run("match (u:User {username:$username}), (f:User {username:$f_username}) \
                         merge (u)-[r:FOLLOWS]->(f) \
                         delete r \
-                        return u;", [this.username, f_username]);
+                        return u;", this.parameters);
     }
 }
 
 class Recommend{
     constructor(username){
-        this.username = username;
+        this.parameters = {"username":username};
     }
     get_recommendations(num_movies){
+        this.parameters["num_movies"] = num_movies;
         return sess.run("match (m:Movie) \
-                        return m limit $1;", [num_movies, this.username]);
+                        return m limit $num_movies;", this.parameters);
     }
     update_recommendations(movies, ratings){
         // need to add how to delete existing edges of opposite ratings
-        query = "match (u:User {username:$1}) ";
+        query = "match (u:User {username:$username}) ";
         for (let index = 0; index < movies.length; index++) {
             if (ratings[index] == 1) {
-                query += "merge (u)-[:LIKES]->(:Movie {movieid:$"+ toString(index+2) +"}) ";
+                query += "merge (u)-[:LIKES]->(:Movie {movieid:$movie"+ toString(index+2) +"}) ";
             } else{
-                query += "merge (u)-[:DISLIKES]->(:Movie {movieid:$"+ toString(index+2) +"}) ";
+                query += "merge (u)-[:DISLIKES]->(:Movie {movieid:$movie"+ toString(index+2) +"}) ";
             }
+            this.parameters["movie"+toString(index+2)] = movies[index];
         }
-        return sess.run(query, [this.username] + movies);
+        return sess.run(query, this.parameters);
     }
 }
 
