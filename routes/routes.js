@@ -4,9 +4,9 @@ const con = require('../controllers');
 const router = express.Router();
 
 // login page
-router.get('/login', routes.login.get_login);
-router.post('/login', routes.login.login);
-router.post('/sign_up', routes.login.sign_up);
+router.get('/login', con.login.get_login);
+router.post('/login', con.login.login);
+router.post('/sign_up', con.login.sign_up);
 //
 
 // home page

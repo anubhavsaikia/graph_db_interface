@@ -1,4 +1,5 @@
 
+const { SESSION_EXPIRED } = require('neo4j-driver/types/error');
 const { movie } = require('../controllers');
 const sess= require('../utils/database');
 
@@ -9,11 +10,24 @@ class Login{
         this.password = password;
         this.age = age;
         this.gender = gender;
+        // Map<String, String> parameters = new HashMap<>();
+        // parameters.put("username", username);
+        // parameters.put("name", name);
+        // parameters.put("password", password);
+        // parameters.put("age", age);
+        // parameters.put("gender", gender);
+        // this.parameters = {"username":username, "password":password};
     }
     verify_login(){
         // can use await
-        return sess.run("match (u:User {username:$1, password:$2}) \
-                        return count(u) = 1;", [this.username, this.password]);
+        // return sess.run("match (u:User {username:$username, password:$password}) \
+        //                 return count(u) = 1;", this.parameters);
+        return sess.run("match (u:User {username:'Utkarsh', password:'asdfghj'}) \
+                        return count(u) = 1;");
+        // Query query = new Query("match (u:User {username:$1, password:$2}) \
+        //                     return count(u) = 1;");
+        // Result result = session.run(query.withParameters(Values.parameters("myNameParam", "Bob")));
+        
     }
     check_uniqueness(){
         // check uniqueness of username

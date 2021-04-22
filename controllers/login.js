@@ -1,12 +1,18 @@
 const db = require('../models/movie');
 
 exports.get_login = (req,res,next) => {
-
-    res.render('login', {
-        pageTitle: 'Login or Sign Up',
-        path: '/login',
-        error: req.query.error
-    });
+    console.log("get_login");
+    if(req.session.user){
+        res.redirect('/home/?username='+req.session.user);
+    }
+    else{
+        res.render('login', {
+            pageTitle: 'Login or Sign Up',
+            path: '/login',
+            error: req.query.error
+        });
+    }
+    
 };
 
 exports.sign_up = (req,res2,next) => {
@@ -19,6 +25,7 @@ exports.sign_up = (req,res2,next) => {
     console.log(username);
     console.log(password);
     console.log(age);
+    console.log(gender);
     const user_signup = new db.Login(username, name, password, age, gender);
     user_signup.check_uniqueness()
         .then(res => {
@@ -40,12 +47,15 @@ exports.sign_up = (req,res2,next) => {
 };
 
 exports.login = (req,res2,next) => {
+    console.log("login");
+    // console.log(req);
+    // console.log(req.body);
     const username = req.body.username;
     const password = req.body.password;
     console.log(username);
     console.log(password);
     // verify_login
-    const user_login = new db.login(username, undefined, password, undefined, undefined);
+    const user_login = new db.Login(username, undefined, password, undefined, undefined);
     user_login.verify_login()
         .then(res => {
             if(res.rows){       //check

@@ -4,7 +4,7 @@
   "description": "Designing interface for project",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -20,12 +20,12 @@
   },
   "homepage": "https://github.com/anubhavsaikia/graph_db_interface#readme",
   "dependencies": {
+    "body-parser": "*",
     "cookie-parser": "^1.4.5",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "neo4j-driver": "*",
-    "body-parser": "*",
+    "express-session": "^1.17.1",
     "morgan": "*",
-    "express-session": "^1.17.1"
+    "neo4j-driver": "^4.2.3"
   }
 }
