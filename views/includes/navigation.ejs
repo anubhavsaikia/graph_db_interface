@@ -1,0 +1,46 @@
+<div class="backdrop"></div>
+<header class="main-header">
+    <!-- <button id="side-menu-toggle">Menu</button> -->
+    <nav class="main-header__nav">
+        <ul class="main-header__item-list">
+
+            <li class="main-header__item">
+                <a class="<%= path === '/home' ? 'active' : '' %>" href="/home">Home</a>
+            </li>
+            <li class="main-header__item">
+                <a class="<%= path === '/movie' ? 'active' : '' %>" href="/movie">Search Movies</a>
+            </li>
+            <li class="main-header__item">
+                <a class="<%= path === '/recs' ? 'active' : '' %>" href="/recs">Recommendations</a>
+            </li>
+            <li class="main-header__item">
+                <a class="<%= path === '/logout' ? 'active' : '' %>" href="/logout">Logout</a>
+            </li>
+
+        </ul>
+    </nav>
+</header>
+
+<!-- <nav class="mobile-nav">
+        <ul class="mobile-nav__item-list">
+                <li class="mobile-nav__item">
+                    <a class="<%= path === '/' ? 'active' : '' %>" href="/">MovieBuff</a>
+                </li>
+                <li class="mobile-nav__item">
+                    <a class="<%= path === '/home' ? 'active' : '' %>" href="/home">Home</a>
+                </li>
+                <li class="mobile-nav__item">
+                    <a class="<%= path === '/movie' ? 'active' : '' %>" href="/movie">Search Movies</a>
+                </li>
+                <li class="mobile-nav__item">
+                    <a class="<%= path === '/recs' ? 'active' : '' %>" href="/recs">Recommendations</a>
+                </li>
+                <li class="mobile-nav__item">
+                    <a class="<%= path === '/logout' ? 'active' : '' %>" href="/logout">Logout</a>
+                </li>
+                <li class="mobile-nav__item">
+                    <a class="<%= path === '/admin/prods' ? 'active' : '' %>" href="/admin/prods">Admin Products
+                    </a>
+                </li>
+            </ul>
+</nav> -->

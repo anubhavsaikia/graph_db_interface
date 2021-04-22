@@ -1,9 +1,7 @@
 const path = require('path');
 const express = require('express');
 const con = require('../controllers');
-console.log("1");
 const router = express.Router();
-console.log("1");
 
 // login page
 router.get('/login', con.login.get_login);
@@ -28,6 +26,8 @@ router.get('/movie', con.movie.get_movie);
 router.post('/movie_search', con.movie.post_search);
 router.post('/movie_rate', con.movie.post_rate);
 // 
+
+router.get('/logout', con.logout.get_logout);
 
 // // recommendations page function mappings
 // router.get('/recs', con.recs.get_recommendations);

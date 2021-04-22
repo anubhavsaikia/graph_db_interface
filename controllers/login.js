@@ -1,6 +1,5 @@
-console.log("1");
 const db = require('../models/movie');
-console.log("1");
+
 exports.get_login = (req,res,next) => {
     console.log("get_login");
     if(req.session.user){

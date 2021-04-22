@@ -3,7 +3,8 @@ const recs = require('../models/movie');
 
 exports.get_recs = (req, res2, next) => {
     // get_recommendations
-    recs.Recs.get_recommendations(res.session.user)
+    const recs_obj = new recs.Recommend(req.session.user);
+    recs_obj.get_recommendations(40)
         .then(res =>{
             if(req.session.user){
                 const all_reccos = res.rows;

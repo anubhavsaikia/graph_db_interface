@@ -1,0 +1,55 @@
+<%- include('./includes/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('includes/navigation.ejs') %>
+
+<main>
+    <h1>Username : <%= username %></h1>
+    <br><br><br>
+    <form class="product-form" action="/friend" method="POST">
+        <div class="form-control">
+            <label for="Search User">Username</label>
+        </div>
+        <input list="users" name="search_username">
+        <datalist id="users">
+            <% for(var i=0; i<users_list.length; i++) {%>
+                <option value= <%= users_list[i]._fields[0].properties.username %> >
+                    <!-- <%= users_list[i]._fields[0].properties.name %> -->
+            <% } %>
+        </datalist>
+        <input type="hidden" value="Username" name="action">
+     
+        <button class="btn" type="submit">Search</button>
+
+
+    <h2>Followers</h2>
+
+
+    <h2>Following</h2>
+
+
+
+
+
+
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main>
