@@ -1,5 +1,6 @@
+console.log("1");
 const db = require('../models/movie');
-
+console.log("1");
 exports.get_login = (req,res,next) => {
     console.log("get_login");
     if(req.session.user){
@@ -29,8 +30,10 @@ exports.sign_up = (req,res2,next) => {
     const user_signup = new db.Login(username, name, password, age, gender);
     user_signup.check_uniqueness()
         .then(res => {
-            console.log(res);
-            if(res.rows){       //check this
+            console.log(res.records[0]._fields[0]);
+            // console.log("break");
+            // console.log(res.records);
+            if(res.records[0]._fields[0]){       //check this
                 user_signup.add_user()
                     .then(res => {
                         req.session.user = username;
@@ -39,8 +42,8 @@ exports.sign_up = (req,res2,next) => {
                     })
             }
             else{
-                res2.redirect('/login/?error=2');
                 console.log("username taken");
+                res2.redirect('/login/?error=2');
             }
         })
     // check_uniqueness, add_user
@@ -58,7 +61,7 @@ exports.login = (req,res2,next) => {
     const user_login = new db.Login(username, undefined, password, undefined, undefined);
     user_login.verify_login()
         .then(res => {
-            if(res.rows){       //check
+            if(res.records[0]._fields[0]){       //check
                 req.session.user = username;
                 console.log("user login successful");
                 res2.redirect('/home/?username='+username);

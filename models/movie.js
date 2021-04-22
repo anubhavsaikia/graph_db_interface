@@ -1,6 +1,6 @@
 
-const { SESSION_EXPIRED } = require('neo4j-driver/types/error');
-const { movie } = require('../controllers');
+// const { SESSION_EXPIRED } = require('neo4j-driver/types/error');
+// const { movie } = require('../controllers');
 const sess= require('../utils/database');
 
 class Login{
@@ -10,20 +10,14 @@ class Login{
         this.password = password;
         this.age = age;
         this.gender = gender;
-        // Map<String, String> parameters = new HashMap<>();
-        // parameters.put("username", username);
-        // parameters.put("name", name);
-        // parameters.put("password", password);
-        // parameters.put("age", age);
-        // parameters.put("gender", gender);
-        // this.parameters = {"username":username, "password":password};
+        this.parameters = {"username":username, "password":password, "name":name, "gender":gender, "age":age};
     }
     verify_login(){
         // can use await
-        // return sess.run("match (u:User {username:$username, password:$password}) \
-        //                 return count(u) = 1;", this.parameters);
-        return sess.run("match (u:User {username:'Utkarsh', password:'asdfghj'}) \
-                        return count(u) = 1;");
+        return sess.run("match (u:User {username:$username, password:$password}) \
+                        return count(u) = 1;", this.parameters);
+        // return sess.run("match (u:User {username:'Utkarsh', password:'asdfghj'}) \
+        //                 return count(u) = 1;");
         // Query query = new Query("match (u:User {username:$1, password:$2}) \
         //                     return count(u) = 1;");
         // Result result = session.run(query.withParameters(Values.parameters("myNameParam", "Bob")));
@@ -31,12 +25,12 @@ class Login{
     }
     check_uniqueness(){
         // check uniqueness of username
-        return sess.run("match (u:User {username:$1}) \
-                        return count(u) = 0;", [this.username]);
+        return sess.run("match (u:User {username:$username}) \
+                        return count(u) = 0;", this.parameters);
     }
     add_user(){
         // add user node to db
-        return sess.run("create (:User {username:$1, name:$2, password:$3, age:$4, gender:$5});", [this.username, this.name, this.password, this.age, this.gender]);
+        return sess.run("create (:User {username:$username, name:$name, password:$password, age:$age, gender:$gender});", this.parameters);
     }
 }
 

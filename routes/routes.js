@@ -1,7 +1,9 @@
 const path = require('path');
 const express = require('express');
 const con = require('../controllers');
+console.log("1");
 const router = express.Router();
+console.log("1");
 
 // login page
 router.get('/login', con.login.get_login);

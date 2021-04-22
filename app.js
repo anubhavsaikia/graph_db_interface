@@ -3,11 +3,19 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 
+
 const rou = require('./routes/routes');
 // const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
 // const neo_session = driver.session();
+console.log("1");
 var cookieParser = require('cookie-parser');
+
+
 var session = require('express-session');
+const sess =  require('./utils/database');
+
+// console.log("1");
+
 
 const app = express();
 app.set('view engine', 'ejs');
