@@ -1,9 +1,9 @@
 
-console.log("10");
+// console.log("10");
 const neo4j = require('neo4j-driver');
-console.log("1");
+// console.log("1");
 const driver = neo4j.driver("neo4j://localhost:7687", 
-                            neo4j.auth.basic("neo4j", "12345"));
+                            neo4j.auth.basic("neo4j", "postgres"));
 
 const sess = driver.session({
     database: "neo4j",  // <- connect to the databse 'neo4j'
