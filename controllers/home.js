@@ -4,6 +4,11 @@ exports.get_home = (req,res2,next) => {
     // get_history ???
     // get_followers, get_following
     // get_all_users
+    console.log("get_home*************************************");
+    console.log(req.query.queryuser);
+    if(req.query.queryuser){
+        console.log("queryuser");
+    }
     if(req.session.user){
         const home_obj = new db.User(req.session.user);
         home_obj.get_all_users()
@@ -45,7 +50,8 @@ exports.get_home = (req,res2,next) => {
                                                             users_list: users_list,
                                                             followers_list: followers_list,
                                                             following_list: following_list,
-                                                            friend_data: undefined
+                                                            friend_data: undefined,
+                                                            is_following: undefined
                                                         });
                                                     })
                                             })
@@ -75,20 +81,21 @@ exports.post_search_friend = (req,res2,next) => {
             console.log(friend_data)
             friend_obj.is_following(friend_id)
                 .then(res =>{
-                        const is_following = res.records[0];
+                        const is_following = res.records[0]._fields[0];
                         console.log(is_following);
-                        res2.render('home', {
-                            pageTitle: 'Home Page',
-                            path: '/home/?username='+req.session.user,
-                            username: req.session.user,
-                            users_list: req.session.users_list,
-                            followers_list: req.session.followers_list,
-                            following_list: req.session.following_list,
-                            liked_movies: req.session.liked_movies,
-                            disliked_movies: req.session.disliked_movies,
-                            friend_data: friend_data,
-                            is_following: is_following
-                        });
+                        res2.redirect('/home/?username='+req.session.user+'&?queryuser='+friend_id);
+                        // res2.render('home', {
+                        //     pageTitle: 'Home Page',
+                        //     path: '/home/?username='+req.session.user,
+                        //     username: req.session.user,
+                        //     users_list: req.session.users_list,
+                        //     followers_list: req.session.followers_list,
+                        //     following_list: req.session.following_list,
+                        //     liked_movies: req.session.liked_movies,
+                        //     disliked_movies: req.session.disliked_movies,
+                        //     friend_data: friend_data,
+                        //     is_following: is_following
+                        // });
                     })
         })
 };

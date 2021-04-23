@@ -92,8 +92,8 @@ class Friends{
     }
     is_following(f_username){
         this.parameters["f_username"] = f_username;
-        return sess.run("match p = (:User {username:$f_username})-[:FOLLOWS]->(:User {username:$username}) \
-                        return exists(p);", this.parameters);
+        return sess.run("match (u1:User {username:$username}), (u2:User {username:$f_username})  \
+                        return exists((u1)-[:FOLLOWS]->(u2));", this.parameters);
     }
     follow(f_username){
         this.parameters["f_username"] = f_username;
