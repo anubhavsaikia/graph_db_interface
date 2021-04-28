@@ -16,22 +16,36 @@
         <input list="users" name="search_username">
         <datalist id="users">
             <% for(var i=0; i<users_list.length; i++) {%>
-                <option value= <%= users_list[i]._fields[0].properties.username %>  >
+                <option value= <%= users_list[i]._fields[0].properties.username %>  text="helloooo">
                     <%= users_list[i]._fields[0].properties.name %>
+                </option>
             <% } %>
         </datalist>
         <input type="hidden" value="Username" name="action">
      
         <button class="btn" type="submit">Search</button>
 
+    <br><br>
+    <% if(is_following=='true'){ %>
+        <!-- <h3>is_following</h3> -->
+        <%= friend_data._fields[0].properties.username %>
+        
+    <% };%>
+    <% if(is_following=='false'){ %>
+        <!-- <h3>is_not_following</h3> -->
+        <%= friend_data._fields[0].properties.username %>
+    <% };%>
 
-    <% if(is_following==true){ %><h3>is_following</h3> <% };%>
-
-    <h2>Followers</h2>
 
     <h2>Following</h2>
+    <% for(var i=0; i<following_list.length; i++) {%>
+        <%= following_list[i]._fields[0].properties.name %>
+    <% } %>
 
-
+    <h2>Followers</h2>
+    <% for(var i=0; i<followers_list.length; i++) {%>
+        <%= followers_list[i]._fields[0].properties.name %>
+    <% } %>
 
 
 
