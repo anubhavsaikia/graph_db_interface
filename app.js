@@ -13,9 +13,6 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const sess =  require('./utils/database');
 
-// console.log("1");
-
-
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
