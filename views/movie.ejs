@@ -1,0 +1,37 @@
+<%- include('./includes/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('includes/navigation.ejs') %>
+
+<main>
+    <% if(is_logged_in == true){ %><h3>Username : <%= username %></h3> <% };%>
+    <% if(is_logged_in == false){ %><h3>Guest Login</h3> <% };%>
+
+    <br><br><br>
+    <form class="product-form" action="/movie_search" method="POST">
+        <div class="form-control">
+            <label for="Search Movie">Movie Title</label>
+        </div>
+        <input list="movies" name="search_moviename">
+        <datalist id="movies">
+            <% for(var i=0; i<movie_list.length; i++) {%>
+                <option hidden value= <%= movie_list[i]._fields[0].properties.movieid %> >
+                <%= movie_list[i]._fields[0].properties.title %>
+                <%= movie_list[i]._fields[0].properties.year %>
+            <% } %>
+        </datalist>
+        <input type="hidden" value="Moviename" name="action">
+     
+        <button class="btn" type="submit">Search</button>
+
+
+    
+    
+
+
+    </form>
+
+</main>
