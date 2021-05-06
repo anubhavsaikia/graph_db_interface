@@ -15,23 +15,45 @@
         <div class="form-control">
             <label for="Search Movie">Movie Title</label>
         </div>
-        <input list="movies" name="search_moviename">
+        <input list="movies" name="search_movieid">
         <datalist id="movies">
             <% for(var i=0; i<movie_list.length; i++) {%>
-                <option hidden value= <%= movie_list[i]._fields[0].properties.movieid %> >
-                <%= movie_list[i]._fields[0].properties.title %>
-                <%= movie_list[i]._fields[0].properties.year %>
+                <!-- 0-id, 1-title, 2-year -->
+                <option value= <%= movie_list[i]._fields[0] %> >
+                <%= movie_list[i]._fields[1] %>
+                <%= movie_list[i]._fields[2] %>
             <% } %>
         </datalist>
         <input type="hidden" value="Moviename" name="action">
      
         <button class="btn" type="submit">Search</button>
 
-
-    
-    
-
-
     </form>
+
+    <% if(movie_data){ %>
+        MovieId : <%= movie_data[0]._fields[0].properties.movieid %><br>
+        Title : <%= movie_data[0]._fields[0].properties.title %><br>
+        Year : <%= movie_data[0]._fields[0].properties.year %><br>
+        Description : <%= movie_data[0]._fields[0].properties.description %><br>
+        Country : <%= movie_data[0]._fields[0].properties.country %><br>
+        <% if(is_logged_in == true){ %>
+            Like : <%= user_rating._fields[0] %><br>
+            Dislike : <%= user_rating._fields[1] %><br>
+
+            <form class="product-form" action="/movie_rate" method="POST">
+                <input type="hidden" value="like" name="rate">
+                <button class="btn" type="submit">Like</button>
+            </form>
+            <form class="product-form" action="/movie_rate" method="POST">
+                <input type="hidden" value="dislike" name="rate">
+                <button class="btn" type="submit">Dislike</button>
+            </form>
+
+        <% };%>
+        <% if(is_logged_in == false){ %>
+            Rating : No rating feature for Guest Login<br>
+            
+        <% };%>
+    <% };%>
 
 </main>
