@@ -7,15 +7,18 @@
 <body>
     <%- include('includes/navigation.ejs') %>
 
+<br><br>
 <main>
     <% if(is_logged_in == true){ %><h3>Username : <%= username %></h3> <% };%>
     <% if(is_logged_in == false){ %><h3>Guest Login</h3> <% };%>
 
     <br><br><br>
+    
     <form class="product-form" action="/movie_search" method="POST">
         <div class="form-control">
-            <label for="Search Movie">Movie Title</label>
+            <label for="Search Movie">Movie Title:</label>
         </div>
+        <center>
         <input list="movies" name="search_movieid">
         <datalist id="movies">
             <% for(var i=0; i<movie_list.length; i++) {%>
@@ -28,6 +31,7 @@
         <input type="hidden" value="Moviename" name="action">
      
         <button class="btn" type="submit">Search</button>
+    </center>
 
     </form>
 
@@ -35,42 +39,54 @@
 
 
     <% if(movie_data){ %>
-        <b>Title : <%= movie_data[0]._fields[0].properties.title %><br></b>
-        <b>MovieId : </b><%= movie_data[0]._fields[0].properties.movieid %><br>
-        <b>Year : </b><%= movie_data[0]._fields[0].properties.year %><br>
-        <b>Description : </b><%= movie_data[0]._fields[0].properties.description %><br>
-        <b>Country : </b><%= movie_data[0]._fields[0].properties.country %><br>
-        <% if(is_logged_in == true){ %>
-            <b>User Review : </b> 
-            <% if(user_rating._fields[0] == true) { %>Liked <% };%>
-            <% if(user_rating._fields[1] == true) { %>Disliked <% };%>
-            <% if(user_rating._fields[0] == false) { %>
-                <% if(user_rating._fields[1] == false) { %>
-                    Unrated
+        <center>
+        <article class="card product-item">
+            <header class="card__header">
+                <h1 class="product__title">
+                    <%= movie_data[0]._fields[0].properties.title %><br>
+                </h1>
+            </header>
+            <div class="card__actions">
+                <b>MovieId : </b><%= movie_data[0]._fields[0].properties.movieid %><br>
+                <b>Year : </b><%= movie_data[0]._fields[0].properties.year %><br>
+                <b>Description : </b><%= movie_data[0]._fields[0].properties.description %><br>
+                <b>Country : </b><%= movie_data[0]._fields[0].properties.country %><br>
+                <br><br><br>
+                <% if(is_logged_in == true){ %>
+                    <b>User Review : </b> 
+                    <% if(user_rating._fields[0] == true) { %>Liked <% };%>
+                    <% if(user_rating._fields[1] == true) { %>Disliked <% };%>
+                    <% if(user_rating._fields[0] == false) { %>
+                        <% if(user_rating._fields[1] == false) { %>
+                            Unrated
+                            <% };%>
+                        <% };%>
+                        
+                    <% if(user_rating._fields[0] == false) { %>
+                        <form class="product-form" action="/movie_rate" method="POST">
+                            <input type="hidden" value="like" name="rate">
+                            <button class="btn" type="submit">Like</button>
+                        </form>
                     <% };%>
+                    <% if(user_rating._fields[1] == false) { %>
+                        <form class="product-form" action="/movie_rate" method="POST">
+                            <input type="hidden" value="dislike" name="rate">
+                            <button class="btn" type="submit">Dislike</button>
+                        </form>
+                    <% };%>
+        
                 <% };%>
-
-            <!-- Like : <%= user_rating._fields[0] %><br>
-            Dislike : <%= user_rating._fields[1] %><br> -->
-
-            <% if(user_rating._fields[0] == false) { %>
-                <form class="product-form" action="/movie_rate" method="POST">
-                    <input type="hidden" value="like" name="rate">
-                    <button class="btn" type="submit">Like</button>
-                </form>
-            <% };%>
-            <% if(user_rating._fields[1] == false) { %>
-                <form class="product-form" action="/movie_rate" method="POST">
-                    <input type="hidden" value="dislike" name="rate">
-                    <button class="btn" type="submit">Dislike</button>
-                </form>
-            <% };%>
-
-        <% };%>
-        <% if(is_logged_in == false){ %>
-            <b>Rating : </b>No rating feature for Guest Login<br>
+                <% if(is_logged_in == false){ %>
+                    <b>Rating : </b>No rating feature for Guest Login<br>
+                    
+                <% };%>
+            </div>
             
-        <% };%>
+        </article>
+        </center>
+
+
+        
     <% };%>
 
 </main>
