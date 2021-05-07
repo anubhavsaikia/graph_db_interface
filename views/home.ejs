@@ -8,8 +8,8 @@
 
 <main>
     <h1>Username : <%= username %></h1>
-    
-    <br><br><br>
+
+    <br>
     <form class="product-form" action="/friend" method="POST">
         <div class="form-control">
             <label for="Search User">Username</label>
@@ -29,7 +29,7 @@
 
     <br><br>
 
-    <% if(error=='1'){ %><h3>Username is invalid. Try Again!</h3> <% };%>    
+    <% if(error=='1'){ %><h3>Username is invalid. Try Again!</h3> <% };%>
 
     <% if(is_following){ %>
         Username : <%= friend_data._fields[0].properties.username %><br>
@@ -54,51 +54,80 @@
 
 
     <h2>Following</h2>
-    <ol>
+    <div class="grid">
     <% for(var i=0; i<following_list.length; i++) {%>
-        <li>
-            <b><%= following_list[i]._fields[0].properties.username %></b><br>
-            Name : <%= following_list[i]._fields[0].properties.name %><br>
-        </li>
+        <article class="card product-item">
+            <header class="card__header">
+                <h1 class="product__title">
+                    <%= following_list[i]._fields[0].properties.username %><br>
+                </h1>
+            </header>
+            <div class="card__actions">
+                <b>Name : </b><%= following_list[i]._fields[0].properties.name %><br>
+            </div>
+        </article>
     <% } %>
-    </ol>
+    </div>
 
     <h2>Followers</h2>
-    <ol>
+    <div class="grid">
     <% for(var i=0; i<followers_list.length; i++) {%>
-        <li>
-            <b><%= followers_list[i]._fields[0].properties.username %></b><br>
-            Name : <%= followers_list[i]._fields[0].properties.name %><br>
-        </li>
+        <article class="card product-item">
+            <header class="card__header">
+                <h1 class="product__title">
+                    <%= followers_list[i]._fields[0].properties.username %><br>
+                </h1>
+            </header>
+            <div class="card__actions">
+                <b>Name : </b><%= followers_list[i]._fields[0].properties.name %><br>
+            </div>
+        </article>
     <% } %>
-    </ol>
-
+    </div>
 
     <h2>Liked Movies:</h2>
-    <ol>
-    <% for(var i=0; i<liked_movies.length; i++) {%>
-        <li>
-            <b>Title : <%= liked_movies[0]._fields[0].properties.title %></b><br>
-            <b>MovieId : </b><%= liked_movies[0]._fields[0].properties.movieid %><br>
-            <b>Year : </b><%= liked_movies[0]._fields[0].properties.year %><br>
-            <b>Description : </b><%= liked_movies[0]._fields[0].properties.description %><br>
-            <b>Country : </b><%= liked_movies[0]._fields[0].properties.country %><br><br>
-        </li>
-    <% } %>
-    </ol>
+    <div class="grid">
+        <% for(var i=0; i<liked_movies.length; i++) {%>
+            <article class="card product-item">
+                <header class="card__header">
+                    <h1 class="product__title">
+                        <%= liked_movies[i]._fields[0].properties.title %><br>
+                    </h1>
+                </header>
+                <div class="card__actions">
+                    <b>MovieId : </b><%= liked_movies[i]._fields[0].properties.movieid %><br>
+                    <b>Year : </b><%= liked_movies[i]._fields[0].properties.year %><br>
+                    <b>Description : </b><%= liked_movies[i]._fields[0].properties.description %><br>
+                    <b>Country : </b><%= liked_movies[i]._fields[0].properties.country %><br>
+                    <br><br>
+                </div>
+            </article>
+        <% } %>
+    </div>
 
-    <h2>Disliked Movies:</h2>
-    <ol>
-    <% for(var i=0; i<disliked_movies.length; i++) {%>
-        <li>
-            <b>Title : <%= disliked_movies[0]._fields[0].properties.title %></b><br>
-            <b>MovieId : </b><%= disliked_movies[0]._fields[0].properties.movieid %><br>
-            <b>Year : </b><%= disliked_movies[0]._fields[0].properties.year %><br>
-            <b>Description : </b><%= disliked_movies[0]._fields[0].properties.description %><br>
-            <b>Country : </b><%= disliked_movies[0]._fields[0].properties.country %><br><br>
-        </li>
-    <% } %>
-    </ol>
+
+    <h2>Disiked Movies:</h2>
+    <div class="grid">
+        <% for(var i=0; i<disliked_movies.length; i++) {%>
+            <article class="card product-item">
+                <header class="card__header">
+                    <h1 class="product__title">
+                        <%= disliked_movies[i]._fields[0].properties.title %><br>
+                    </h1>
+                </header>
+                <div class="card__actions">
+                    <b>MovieId : </b><%= disliked_movies[i]._fields[0].properties.movieid %><br>
+                    <b>Year : </b><%= disliked_movies[i]._fields[0].properties.year %><br>
+                    <b>Description : </b><%= disliked_movies[i]._fields[0].properties.description %><br>
+                    <b>Country : </b><%= disliked_movies[i]._fields[0].properties.country %><br>
+                    <br><br>
+                </div>
+            </article>
+        <% } %>
+    </div>
+
+
+
 
 
 
