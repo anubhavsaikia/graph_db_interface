@@ -49,7 +49,7 @@ class User{
                         return u;", this.parameters);
     }
     get_all_users(){
-        return sess.run("match (u:User) return u;");
+        return sess.run("match (u:User) where u.username <> $username return u;", this.parameters);
     }
     get_rating(movieid){
         this.parameters["movieid"] = movieid;
@@ -79,6 +79,9 @@ class Movie{
     constructor(movieid){
         this.parameters = {"movieid":movieid};
     }
+    exists(){
+        return sess.run("match (m:Movie {movieid:$movieid}) return count(m) = 1;", this.parameters);
+    }
     get_all_movies(){
         return sess.run("match (m:Movie) return m.movieid as movieid, m.title as title, m.year as year;");
     }
@@ -91,9 +94,13 @@ class Friends{
     constructor(username){
         this.parameters = {"username":username};
     }
+    exists(f_username){
+        this.parameters["f_username"] = f_username;
+        return sess.run("match (u:User {username:$f_username}) return count(u) = 1;", this.parameters);
+    }
     fetch_info(f_username){
         this.parameters["f_username"] = f_username;
-        return sess.run("match (u:User {username:$f_username}) return u", this.parameters);
+        return sess.run("match (u:User {username:$f_username}) return u;", this.parameters);
     }
     is_following(f_username){
         this.parameters["f_username"] = f_username;
@@ -104,10 +111,11 @@ class Friends{
         this.parameters["f_username"] = f_username;
         return sess.run("match (u:User {username:$username}), (f:User {username:$f_username}) \
                         merge (u)-[:FOLLOWS]->(f) \
-                        return u;", [this.username, f_username]);
+                        return u;", this.parameters);
     }
     unfollow(f_username){
         this.parameters["f_username"] = f_username;
+        console.log(this.parameters);
         return sess.run("match (u:User {username:$username}), (f:User {username:$f_username}) \
                         merge (u)-[r:FOLLOWS]->(f) \
                         delete r \

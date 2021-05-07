@@ -8,6 +8,7 @@
 
 <main>
     <h1>Username : <%= username %></h1>
+    
     <br><br><br>
     <form class="product-form" action="/friend" method="POST">
         <div class="form-control">
@@ -24,29 +25,80 @@
         <input type="hidden" value="Username" name="action">
      
         <button class="btn" type="submit">Search</button>
+    </form>
 
     <br><br>
-    <% if(is_following=='true'){ %>
-        <h3>is_following</h3>
-        <%= friend_data._fields[0].properties.username %>
-        
+
+    <% if(error=='1'){ %><h3>Username is invalid. Try Again!</h3> <% };%>    
+
+    <% if(is_following){ %>
+        Username : <%= friend_data._fields[0].properties.username %><br>
+        Name : <%= friend_data._fields[0].properties.name %><br>
+        Age : <%= friend_data._fields[0].properties.age %><br>
+        Gender : <%= friend_data._fields[0].properties.gender %><br>
+
     <% };%>
+
     <% if(is_following=='false'){ %>
-        <h3>is_not_following</h3>
-        <%= friend_data._fields[0].properties.username %>
+        <form class="product-form" action="/follow" method="POST">
+            <input type="hidden" value="follow" name="f_action">
+            <button class="btn" type="submit">Follow</button>
+        </form>
+    <% };%>
+    <% if(is_following=='true'){ %>
+        <form class="product-form" action="/follow  " method="POST">
+            <input type="hidden" value="unfollow" name="f_action">
+            <button class="btn" type="submit">Unfollow</button>
+        </form>
     <% };%>
 
 
     <h2>Following</h2>
+    <ol>
     <% for(var i=0; i<following_list.length; i++) {%>
-        <%= following_list[i]._fields[0].properties.name %>
+        <li>
+            <b><%= following_list[i]._fields[0].properties.username %></b><br>
+            Name : <%= following_list[i]._fields[0].properties.name %><br>
+        </li>
     <% } %>
+    </ol>
 
     <h2>Followers</h2>
+    <ol>
     <% for(var i=0; i<followers_list.length; i++) {%>
-        <%= followers_list[i]._fields[0].properties.name %>
+        <li>
+            <b><%= followers_list[i]._fields[0].properties.username %></b><br>
+            Name : <%= followers_list[i]._fields[0].properties.name %><br>
+        </li>
     <% } %>
+    </ol>
 
+
+    <h2>Liked Movies:</h2>
+    <ol>
+    <% for(var i=0; i<liked_movies.length; i++) {%>
+        <li>
+            <b>Title : <%= liked_movies[0]._fields[0].properties.title %></b><br>
+            <b>MovieId : </b><%= liked_movies[0]._fields[0].properties.movieid %><br>
+            <b>Year : </b><%= liked_movies[0]._fields[0].properties.year %><br>
+            <b>Description : </b><%= liked_movies[0]._fields[0].properties.description %><br>
+            <b>Country : </b><%= liked_movies[0]._fields[0].properties.country %><br><br>
+        </li>
+    <% } %>
+    </ol>
+
+    <h2>Disliked Movies:</h2>
+    <ol>
+    <% for(var i=0; i<disliked_movies.length; i++) {%>
+        <li>
+            <b>Title : <%= disliked_movies[0]._fields[0].properties.title %></b><br>
+            <b>MovieId : </b><%= disliked_movies[0]._fields[0].properties.movieid %><br>
+            <b>Year : </b><%= disliked_movies[0]._fields[0].properties.year %><br>
+            <b>Description : </b><%= disliked_movies[0]._fields[0].properties.description %><br>
+            <b>Country : </b><%= disliked_movies[0]._fields[0].properties.country %><br><br>
+        </li>
+    <% } %>
+    </ol>
 
 
 
