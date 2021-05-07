@@ -6,43 +6,43 @@
 
     <body>
 
-            <main>
-                <h3>Username : <%= username %></h3>
-                <input type="hidden" name="username" value = <%= username %> >
-                <br><br><br>
-                <form action="http://localhost:3000/recs" method="POST">
-                <div class="grid">
+        <main>
+            <h3>Username : <%= username %></h3>
+            <input type="hidden" name="username" value = <%= username %> >
+            <br><br><br>
+            <form action="http://localhost:3000/recs" method="POST">
+            <div class="grid">
+                
+                <% listnames.forEach(function(item) { %>
+                    <article class="card product-item">
+                        <header class="card__header">
+                            <h1 class="product__title">
+                                <%= item %>
+                            </h1>
+                        </header>
+                        <div class="card__actions">
+                            <input type="radio" id="like" name= <%= item %> value='1'>
+                            <label for="like">Like</label><br>
+                            <input type="radio" id="dislike" name= <%= item %> value='-1'>
+                            <label for="dislike">Dislike</label><br>
+                            <input type="radio" id="neutral" name= <%= item %> value='0'>
+                            <label for="neutral">Neutral</label><br>
+                        </div>
+                    </article>
+                <% }); %>
                     
-                    <% listnames.forEach(function(item) { %>
-                        <article class="card product-item">
-                            <header class="card__header">
-                                <h1 class="product__title">
-                                    <%= item %>
-                                </h1>
-                            </header>
-                            <div class="card__actions">
-                                <input type="radio" id="like" name= <%= item %> value='1'>
-                                <label for="like">Like</label><br>
-                                <input type="radio" id="dislike" name= <%= item %> value='-1'>
-                                <label for="dislike">Dislike</label><br>
-                                <input type="radio" id="neutral" name= <%= item %> value='0'>
-                                <label for="neutral">Neutral</label><br>
-                            </div>
-                        </article>
-                    <% }); %>
-                        
-                    
-                </div>
-                <br><br><br>
-                <center>
-                    <button class="btn" type="submit">
-                        Submit
-                    </button>
-                </center>
-            </form>
-<br><br><br>
-            <form action="/logout" method="POST">
+                
+            </div>
+            <br><br><br>
+            <center>
                 <button class="btn" type="submit">
+                    Submit
+                </button>
+            </center>
+        </form>
+<br><br><br>
+        <form action="/logout" method="POST">
+            <button class="btn" type="submit">
                     Logout
                 </button>
             </form>

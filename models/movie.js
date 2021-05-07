@@ -53,8 +53,13 @@ class User{
     }
     get_rating(movieid){
         this.parameters["movieid"] = movieid;
-        return sess.run("match (:User {username:$username})-[e]->(m:Movie {movieid:$movieid}) \
-                        return type(e) = \"LIKES\";", this.parameters);
+        return sess.run("match (u:User {username:$username}), (m:Movie {movieid:$movieid}) \
+                        return EXISTS( (u)-[:LIKES]-(m) ) as like, EXISTS( (u)-[:DISLIKES]-(m) ) as dislike;", this.parameters);
+    }
+    remove_rating(movieid){
+        this.parameters["movieid"] = movieid;
+        return sess.run("match (u:User {username:$username})-[e]->(m:Movie {movieid:$movieid}) \
+                        detach delete e;", this.parameters);
     }
     update_rating(movieid, rating){
         this.parameters["movieid"] = movieid;
@@ -75,7 +80,7 @@ class Movie{
         this.parameters = {"movieid":movieid};
     }
     get_all_movies(){
-        return sess.run("match (m:Movie) return m;");
+        return sess.run("match (m:Movie) return m.movieid as movieid, m.title as title, m.year as year;");
     }
     fetch_movie(){
         return sess.run("match (m:Movie {movieid:$movieid}) return m", this.parameters);
