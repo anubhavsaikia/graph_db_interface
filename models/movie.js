@@ -120,22 +120,24 @@ class Recommend{
         this.parameters = {"username":username};
     }
     get_recommendations(num_movies){
-        this.parameters["num_movies"] = num_movies;
+        this.parameters["num_movies"] = parseInt(num_movies);
         return sess.run("match (m:Movie) \
-                        return m limit $num_movies;", this.parameters);
+                        return m, rand() as rand \
+                        order by rand asc limit 40;", this.parameters);
     }
-    update_recommendations(movies, ratings){
-        // need to add how to delete existing edges of opposite ratings
-        query = "match (u:User {username:$username}) ";
-        for (let index = 0; index < movies.length; index++) {
-            if (ratings[index] == 1) {
-                query += "merge (u)-[:LIKES]->(:Movie {movieid:$movie"+ toString(index+2) +"}) ";
-            } else{
-                query += "merge (u)-[:DISLIKES]->(:Movie {movieid:$movie"+ toString(index+2) +"}) ";
-            }
-            this.parameters["movie"+toString(index+2)] = movies[index];
-        }
-        return sess.run(query, this.parameters);
+    remove_recommendations(movies){
+        this.parameters["movies"] = movies;
+        return sess.run("match (u:User {username:$username})-[e]->(m:Movie) \
+                        where m.movieid in $movies \
+                        detach delete e;", this.parameters);
+    }
+    update_recommendations(liked_movies, disliked_movies){
+        this.parameters["liked_movies"] = liked_movies;
+        this.parameters["disliked_movies"] = disliked_movies;
+        return sess.run("match (u:User {username:$username}), (lm:Movie), (dm:Movie) \
+                        where lm.movieid in $liked_movies and dm.movieid in $disliked_movies \
+                        merge (u)-[:LIKES]->(lm)  \
+                        merge (u)-[:DISLIKES]->(dm);", this.parameters);
     }
 }
 
