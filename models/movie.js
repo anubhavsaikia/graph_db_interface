@@ -139,13 +139,17 @@ class Recommend{
                         where m.movieid in $movies \
                         detach delete e;", this.parameters);
     }
-    update_recommendations(liked_movies, disliked_movies){
-        this.parameters["liked_movies"] = liked_movies;
-        this.parameters["disliked_movies"] = disliked_movies;
-        return sess.run("match (u:User {username:$username}), (lm:Movie), (dm:Movie) \
-                        where lm.movieid in $liked_movies and dm.movieid in $disliked_movies \
-                        merge (u)-[:LIKES]->(lm)  \
-                        merge (u)-[:DISLIKES]->(dm);", this.parameters);
+    update_recommendations(movies, flag){
+        this.parameters["movies"] = movies;
+        if (flag == 1){
+            return sess.run("match (u:User {username:$username}), (m:Movie) \
+                            where m.movieid in $movies \
+                            merge (u)-[:LIKES]->(m);", this.parameters);
+        } else{
+            return sess.run("match (u:User {username:$username}), (m:Movie) \
+                            where m.movieid in $movies \
+                            merge (u)-[:DISLIKES]->(m);", this.parameters);
+        }
     }
 }
 

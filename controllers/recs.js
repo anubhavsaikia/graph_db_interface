@@ -43,8 +43,9 @@ exports.post_submit = (req, res2, next) => {
     var liked_movies = [];
     var disliked_movies = [];
     var preferences = req.body;
+    console.log(preferences);
     for (var key of Object.keys(preferences)) {
-        // console.log(key + " -> " + preferences[key]);
+        console.log(key + " -> " + preferences[key]);
         if (preferences[key]=='1'){
             liked_movies.push(key);
         } else{
@@ -57,10 +58,13 @@ exports.post_submit = (req, res2, next) => {
 
     rec_obj.remove_recommendations(movies)
     .then(res => {
-        rec_obj.update_recommendations(liked_movies, disliked_movies)
+        rec_obj.update_recommendations(liked_movies, 1)
         .then(res =>{
-            console.log(req.session.start_id);
-            res2.redirect("/home/?username="+userid);
+            rec_obj.update_recommendations(disliked_movies, -1)
+            .then(res =>{
+                console.log(req.session.start_id);
+                res2.redirect("/home/?username="+userid);
+            })
         })
     })
 }
@@ -79,7 +83,7 @@ exports.post_get_more = (req,res2,next) =>{
     var disliked_movies = [];
     var preferences = req.body;
     for (var key of Object.keys(preferences)) {
-        // console.log(key + " -> " + preferences[key]);
+        console.log(key + " -> " + preferences[key]);
         if (preferences[key]=='1'){
             liked_movies.push(key);
         } else{
@@ -92,18 +96,21 @@ exports.post_get_more = (req,res2,next) =>{
 
     rec_obj.remove_recommendations(movies)
     .then(res => {
-        rec_obj.update_recommendations(liked_movies, disliked_movies)
+        rec_obj.update_recommendations(liked_movies, 1)
         .then(res =>{
-            req.session.start_id = start_id + rec_size;
-            console.log(req.session.start_id);
-            res2.render('recs', {
-                pageTitle: 'Recommendations',
-                path: '/recs/?username='+req.session.user,
-                all_recs: req.session.all_recs,
-                username: req.session.user,
-                start_id: req.session.start_id,
-                rec_size: req.session.rec_size
-            });
+            rec_obj.update_recommendations(disliked_movies, -1)
+            .then(res =>{
+                req.session.start_id = start_id + rec_size;
+                console.log(req.session.start_id);
+                res2.render('recs', {
+                    pageTitle: 'Recommendations',
+                    path: '/recs/?username='+req.session.user,
+                    all_recs: req.session.all_recs,
+                    username: req.session.user,
+                    start_id: req.session.start_id,
+                    rec_size: req.session.rec_size
+                });
+            })
         })
     })
 }

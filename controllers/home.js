@@ -26,19 +26,19 @@ exports.get_home = (req,res2,next) => {
                                 const liked_movies = res.records;
                                 req.session.liked_movies = liked_movies;
                                 console.log("liked_movies");
-                                console.log(liked_movies);
+                                // console.log(liked_movies);
                                 home_obj.get_disliked_movies()
                                     .then(res =>{
                                         const disliked_movies = res.records;
                                         req.session.disliked_movies = disliked_movies;
                                         console.log("disliked_movies");
-                                        console.log(disliked_movies[0]._fields);
+                                        // console.log(disliked_movies[0]._fields);
                                         home_obj.get_followers()
                                             .then(res =>{
                                                 const followers_list = res.records;
                                                 req.session.followers_list = followers_list;
                                                 console.log("followers_list");
-                                                console.log(followers_list);
+                                                // console.log(followers_list);
                                                 home_obj.get_following()
                                                     .then(res =>{
                                                         const following_list = res.records;
