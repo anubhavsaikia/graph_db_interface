@@ -15,6 +15,7 @@ exports.get_recs = (req, res2, next) => {
             req.session.rec_size = 10;
             req.session.start_id = 0;
             console.log("render recs");
+            console.log(req.session.start_id);
             res2.render('recs', {
                 pageTitle: 'Recommendations',
                 path: '/recs/?username='+req.session.user,
@@ -32,23 +33,33 @@ exports.get_recs = (req, res2, next) => {
 
 exports.post_submit = (req, res2, next) => {
     // update_recs
-    var preferences = req.body;
-    console.log(Object.keys(preferences));
-    for (var key of Object.keys(preferences)) {
-        console.log(key + " -> " + preferences[key])
-    }
-    console.log(asdfaskdfa);
     const userid = req.session.user;
     const start_id = req.session.start_id;
     const rec_size = req.session.rec_size;
+    const all_recs = req.session.all_recs;
     const rec_obj = new db.Recommend(userid);
-    const movies = req.session.all_recs[start_id, start_id + rec_size];
+
+    var movies = [];
+    var liked_movies = [];
+    var disliked_movies = [];
+    var preferences = req.body;
+    for (var key of Object.keys(preferences)) {
+        // console.log(key + " -> " + preferences[key]);
+        if (preferences[key]=='1'){
+            liked_movies.push(key);
+        } else{
+            disliked_movies.push(key);
+        }
+    }
+    for (let i = start_id; i < start_id + rec_size; i++) {
+        movies.push(all_recs[i]._fields[0].properties.movieid);
+    }
+
     rec_obj.remove_recommendations(movies)
     .then(res => {
-        var liked_movies = [];
-        var disliked_movies = [];
         rec_obj.update_recommendations(liked_movies, disliked_movies)
         .then(res =>{
+            console.log(req.session.start_id);
             res2.redirect("/home/?username="+userid);
         })
     })
@@ -57,18 +68,42 @@ exports.post_submit = (req, res2, next) => {
 
 exports.post_get_more = (req,res2,next) =>{
     // update_recs
-    const all_reccos = req.session.all_reccos;
-    const old_start_id = req.body.start_id;
-    req.body.start_id = old_start_id+10;
+    const userid = req.session.user;
+    const start_id = req.session.start_id;
+    const rec_size = req.session.rec_size;
+    const all_recs = req.session.all_recs;
+    const rec_obj = new db.Recommend(userid);
+
+    var movies = [];
+    var liked_movies = [];
+    var disliked_movies = [];
     var preferences = req.body;
-    recs.Recs.update_recs(req.session.user, preferences)
+    for (var key of Object.keys(preferences)) {
+        // console.log(key + " -> " + preferences[key]);
+        if (preferences[key]=='1'){
+            liked_movies.push(key);
+        } else{
+            disliked_movies.push(key);
+        }
+    }
+    for (let i = start_id; i < start_id + rec_size; i++) {
+        movies.push(all_recs[i]._fields[0].properties.movieid);
+    }
+
+    rec_obj.remove_recommendations(movies)
+    .then(res => {
+        rec_obj.update_recommendations(liked_movies, disliked_movies)
         .then(res =>{
+            req.session.start_id = start_id + rec_size;
+            console.log(req.session.start_id);
             res2.render('recs', {
-                pageTitle: 'All Recommendations',
+                pageTitle: 'Recommendations',
                 path: '/recs/?username='+req.session.user,
-                listnames: all_reccos,
+                all_recs: req.session.all_recs,
                 username: req.session.user,
-                start_id: old_start_id+10
+                start_id: req.session.start_id,
+                rec_size: req.session.rec_size
             });
         })
+    })
 }
