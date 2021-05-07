@@ -11,7 +11,7 @@ exports.get_recs = (req, res2, next) => {
             const all_recs = res.records;
             console.log("recs list");
             req.session.all_recs = all_recs;
-            console.log(all_recs[0]._fields);
+            // console.log(all_recs[0]._fields);
             req.session.rec_size = 10;
             req.session.start_id = 0;
             console.log("render recs");

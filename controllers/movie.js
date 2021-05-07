@@ -10,8 +10,8 @@ exports.get_movie = (req,res2,next) => {
     .then(res => {
         const movie_list = res.records;
         // req.session.movie_list = movie_list;
-        console.log(movie_list[0]._fields);
-        console.log("movielist");
+        // console.log(movie_list[0]._fields);
+        // console.log("movielist");
         if (req.session.user){
             req.session.is_logged_in = true;
             res2.render('movie', {
@@ -20,7 +20,8 @@ exports.get_movie = (req,res2,next) => {
                 movie_list: movie_list,
                 username: req.session.user,
                 is_logged_in: req.session.is_logged_in,
-                movie_data: false
+                movie_data: false,
+                error: undefined
             });
         } else{
             req.session.is_logged_in = false;
@@ -30,7 +31,8 @@ exports.get_movie = (req,res2,next) => {
                 movie_list: movie_list,
                 username: req.session.user,
                 is_logged_in: req.session.is_logged_in,
-                movie_data: false
+                movie_data: false,
+                error: undefined
             });
         }
     })
@@ -49,47 +51,68 @@ exports.post_search = (req,res2,next) => {
     // console.log(req.body.movie)
 
     req.session.movie_id = imdb_id;
-    console.log(imdb_id);
+    // console.log(imdb_id);
 
-    movie_obj.fetch_movie()
+    movie_obj.get_all_movies()
     .then(res => {
-        const movie_data = res.records;
-        // req.session.movie_id = imdb_id;
-        req.session.movie_data = movie_data;
-        console.log(movie_data);
-        movie_obj.get_all_movies()
-        .then(res => {
-            const movie_list = res.records;
-            console.log(movie_list[0]._fields);
-            console.log("movielist");
-                
-            if (req.session.user){
-                user_obj.get_rating(imdb_id)
+        const movie_list = res.records;
+        // console.log(movie_list[0]._fields);
+        console.log("movielist");
+
+        movie_obj.exists()
+        .then(res =>{
+            const exist = res.records[0]._fields[0];
+            if(exist){
+                movie_obj.fetch_movie()
                 .then(res => {
-                    const user_rating = res.records[0];
-                    console.log(user_rating);
-                    res2.render('movie', {
-                        pageTitle: 'Movie Data',
-                        path: '/movie/?movie_id='+imdb_id,
-                        movie_data: req.session.movie_data,
-                        user_rating: user_rating,
-                        movie_list: movie_list,
-                        username: req.session.user,
-                        is_logged_in: req.session.is_logged_in
-                    });
+                    const movie_data = res.records;
+                    req.session.movie_data = movie_data;
+                    // console.log(movie_data);
+
+                    if (req.session.user){
+                        user_obj.get_rating(imdb_id)
+                        .then(res => {
+                            const user_rating = res.records[0];
+                            // console.log(user_rating);
+                            res2.render('movie', {
+                                pageTitle: 'Movie Data',
+                                path: '/movie/?movie_id='+imdb_id,
+                                movie_data: req.session.movie_data,
+                                user_rating: user_rating,
+                                movie_list: movie_list,
+                                username: req.session.user,
+                                is_logged_in: req.session.is_logged_in,
+                                error: undefined
+                            });
+                        })
+                    } else{
+                        res2.render('movie', {
+                            pageTitle: 'Movie Data',
+                            path: '/movie/?movie_id='+imdb_id,
+                            movie_data: req.session.movie_data,
+                            user_rating: false,
+                            movie_list: movie_list,
+                            username: req.session.user,
+                            is_logged_in: req.session.is_logged_in,
+                            error: undefined
+                        });
+                    }
                 })
-            } else{
+            }
+            else{
                 res2.render('movie', {
                     pageTitle: 'Movie Data',
-                    path: '/movie/?movie_id='+imdb_id,
-                    movie_data: req.session.movie_data,
+                    path: '/movie/?movie_id='+imdb_id+'&error=1',
+                    movie_data: false,
                     user_rating: false,
                     movie_list: movie_list,
                     username: req.session.user,
-                    is_logged_in: req.session.is_logged_in
+                    is_logged_in: req.session.is_logged_in,
+                    error: 1
                 });
             }
         })
+
     })
 };
 
@@ -101,8 +124,8 @@ exports.post_rate = (req,res2,next) => {
         rating = 0;
     }
     const userid = req.session.user;
-    console.log(imdb_id);
-    console.log(rating);
+    // console.log(imdb_id);
+    // console.log(rating);
     const user_obj = new db.User(userid);
     const movie_obj = new db.Movie(imdb_id);
     
@@ -111,16 +134,16 @@ exports.post_rate = (req,res2,next) => {
         user_obj.update_rating(imdb_id, rating)
         .then(res => {
             const out = res.records;
-            console.log(out);
+            // console.log(out);
             user_obj.get_rating(imdb_id)
             .then(res => {
                 const user_rating = res.records[0];
-                console.log(user_rating);
+                // console.log(user_rating);
                 movie_obj.get_all_movies()
                 .then(res => {
                     const movie_list = res.records;
-                    console.log(movie_list[0]._fields);
-                    console.log("movielist");
+                    // console.log(movie_list[0]._fields);
+                    // console.log("movielist");
 
                     res2.render('movie', {
                         pageTitle: 'Movie Data',
@@ -129,7 +152,8 @@ exports.post_rate = (req,res2,next) => {
                         user_rating: user_rating,
                         movie_list: movie_list,
                         username: req.session.user,
-                        is_logged_in: req.session.is_logged_in
+                        is_logged_in: req.session.is_logged_in,
+                        error: undefined
                     });
                 })
             })
