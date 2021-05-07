@@ -17,7 +17,7 @@ router.post('/follow', con.home.post_follow_toggle);
 
 // recommendations page
 router.get('/recs', con.recs.get_recs);
-router.post('/submit', con.recs.post_submit);
+router.post('/recs_submit', con.recs.post_submit);
 router.post('/get_recs', con.recs.post_get_more);
 // 
 

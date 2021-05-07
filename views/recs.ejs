@@ -1,50 +1,54 @@
 <%- include('./includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/forms.css">
-    <link rel="stylesheet" href="/css/product.css">
-    <link rel="stylesheet" href="/css/main.css">
-    </head>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/product.css">
+<!-- <link rel="stylesheet" href="/css/main.css"> -->
+</head>
 
-    <body>
+<body>
+    <%- include('includes/navigation.ejs') %>
 
-        <main>
-            <h3>Username : <%= username %></h3>
-            <input type="hidden" name="username" value = <%= username %> >
-            <br><br><br>
-            <form action="http://localhost:3000/recs" method="POST">
-            <div class="grid">
-                
-                <% listnames.forEach(function(item) { %>
-                    <article class="card product-item">
-                        <header class="card__header">
-                            <h1 class="product__title">
-                                <%= item %>
-                            </h1>
-                        </header>
-                        <div class="card__actions">
-                            <input type="radio" id="like" name= <%= item %> value='1'>
-                            <label for="like">Like</label><br>
-                            <input type="radio" id="dislike" name= <%= item %> value='-1'>
-                            <label for="dislike">Dislike</label><br>
-                            <input type="radio" id="neutral" name= <%= item %> value='0'>
-                            <label for="neutral">Neutral</label><br>
-                        </div>
-                    </article>
-                <% }); %>
+<main>
+    <h3>Username : <%= username %></h3>
+    <br><br><br>
+
+    <h3>Recommendations</h3>
+
+    <input type="hidden" name="username" value = <%= username %> >
+    <br><br><br>
+    <form action="/recs" method="POST">
+        <div class="grid">
+            
+            <% for(var i=0; i < rec_size; i++) {%>
+                <article class="card product-item">
+                    <header class="card__header">
+                        <h1 class="product__title">
+                            <%= all_recs[start_id + i]._fields[0].properties.title %><br>
+                        </h1>
+                    </header>
+                    <div class="card__actions">
+                        <b>MovieId : </b><%= all_recs[start_id + i]._fields[0].properties.movieid %><br>
+                        <b>Year : </b><%= all_recs[start_id + i]._fields[0].properties.year %><br>
+                        <b>Description : </b><%= all_recs[start_id + i]._fields[0].properties.description %><br>
+                        <b>Country : </b><%= all_recs[start_id + i]._fields[0].properties.country %><br>
+                        <br><br><br>
+                        <input type="radio" id="like" name= <%= all_recs[start_id + i]._fields[0].properties.movieid %> value='1'>
+                        <label for="like">Like</label><br>
+                        <input type="radio" id="dislike" name= <%= all_recs[start_id + i]._fields[0].properties.movieid %> value='-1'>
+                        <label for="dislike">Dislike</label><br>
+                    </div>
                     
-                
-            </div>
-            <br><br><br>
-            <center>
-                <button class="btn" type="submit">
-                    Submit
-                </button>
-            </center>
-        </form>
+                </article>
+            <% } %>
+            
+        </div>
+        <center>
+            <% if(start_id < 30){ %>
+                <button class="btn" type="submit" formaction="/get_recs">Get More</button>
+            <% }; %>
+            <button class="btn" type="submit" formaction="/recs_submit">Submit</button>
+        </center>
+    </form>
+
 <br><br><br>
-        <form action="/logout" method="POST">
-            <button class="btn" type="submit">
-                    Logout
-                </button>
-            </form>
-            </main>
-            <%- include('./includes/end.ejs') %>
+
+</main>
