@@ -78,11 +78,11 @@
     <ol>
     <% for(var i=0; i<liked_movies.length; i++) {%>
         <li>
-            <b>Title : <%= liked_movies[0]._fields[0].properties.title %></b><br>
-            <b>MovieId : </b><%= liked_movies[0]._fields[0].properties.movieid %><br>
-            <b>Year : </b><%= liked_movies[0]._fields[0].properties.year %><br>
-            <b>Description : </b><%= liked_movies[0]._fields[0].properties.description %><br>
-            <b>Country : </b><%= liked_movies[0]._fields[0].properties.country %><br><br>
+            <b>Title : <%= liked_movies[i]._fields[0].properties.title %></b><br>
+            <b>MovieId : </b><%= liked_movies[i]._fields[0].properties.movieid %><br>
+            <b>Year : </b><%= liked_movies[i]._fields[0].properties.year %><br>
+            <b>Description : </b><%= liked_movies[i]._fields[0].properties.description %><br>
+            <b>Country : </b><%= liked_movies[i]._fields[0].properties.country %><br><br>
         </li>
     <% } %>
     </ol>
@@ -91,11 +91,11 @@
     <ol>
     <% for(var i=0; i<disliked_movies.length; i++) {%>
         <li>
-            <b>Title : <%= disliked_movies[0]._fields[0].properties.title %></b><br>
-            <b>MovieId : </b><%= disliked_movies[0]._fields[0].properties.movieid %><br>
-            <b>Year : </b><%= disliked_movies[0]._fields[0].properties.year %><br>
-            <b>Description : </b><%= disliked_movies[0]._fields[0].properties.description %><br>
-            <b>Country : </b><%= disliked_movies[0]._fields[0].properties.country %><br><br>
+            <b>Title : <%= disliked_movies[i]._fields[0].properties.title %></b><br>
+            <b>MovieId : </b><%= disliked_movies[i]._fields[0].properties.movieid %><br>
+            <b>Year : </b><%= disliked_movies[i]._fields[0].properties.year %><br>
+            <b>Description : </b><%= disliked_movies[i]._fields[0].properties.description %><br>
+            <b>Country : </b><%= disliked_movies[i]._fields[0].properties.country %><br><br>
         </li>
     <% } %>
     </ol>
