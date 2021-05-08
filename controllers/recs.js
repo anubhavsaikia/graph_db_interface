@@ -6,7 +6,7 @@ exports.get_recs = (req, res2, next) => {
     console.log("get recs")
     const recs_obj = new db.Recommend(req.session.user);
     if (req.session.user){
-        recs_obj.get_recommendations(40)
+        recs_obj.get_recommendations(1)
         .then(res =>{
             const all_recs = res.records;
             console.log("recs list");

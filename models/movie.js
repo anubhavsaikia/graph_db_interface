@@ -11,7 +11,8 @@ class Login{
     verify_login(){
         // can use await
         return sess.run("match (u:User {username:$username, password:$password}) \
-                        return count(u) = 1;", this.parameters);       
+                        return count(u) = 1;", this.parameters);
+        // return sess.run("create (:User {username:\"uttu\", name:\"qwertyu\", password:\"12345\", age:\"123\", gender:\"m\"});");       
     }
     check_uniqueness(){
         // check uniqueness of username
@@ -65,11 +66,11 @@ class User{
         this.parameters["movieid"] = movieid;
         if (rating == 1){
             return sess.run("match (u:User {username:$username}), (m:Movie {movieid:$movieid}) \
-                            merge (u)-[:LIKES]->(m) \
+                            merge (u)-[:LIKES {exemplarWeight:0.0}]->(m) \
                             return u;", this.parameters);
         } else{
             return sess.run("match (u:User {username:$username}), (m:Movie {movieid:$movieid}) \
-                            merge (u)-[:DISLIKES]->(m) \
+                            merge (u)-[:DISLIKES {exemplarWeight:0.0}]->(m) \
                             return u;", this.parameters);
         }
     }
@@ -110,7 +111,7 @@ class Friends{
     follow(f_username){
         this.parameters["f_username"] = f_username;
         return sess.run("match (u:User {username:$username}), (f:User {username:$f_username}) \
-                        merge (u)-[:FOLLOWS]->(f) \
+                        merge (u)-[:FOLLOWS {exemplarWeight:0.0}]->(f) \
                         return u;", this.parameters);
     }
     unfollow(f_username){
@@ -127,11 +128,27 @@ class Recommend{
     constructor(username){
         this.parameters = {"username":username};
     }
-    get_recommendations(num_movies){
-        this.parameters["num_movies"] = parseInt(num_movies);
-        return sess.run("match (m:Movie) \
+    get_recommendations(toggle){
+        // this.parameters["num_movies"] = parseInt(num_movies);
+        if (toggle=0){
+            return sess.run("match (u:User {username:$username})-[:LIKES]->(m:Movie) \
+            with u, m, rand() as rand \
+            order by rand asc limit 10 \
+            WITH u, collect(m) as idList \
+            CALL particlefiltering(idList, 0, 100) YIELD nodeId, score \
+            match (mn:Movie) \
+            WHERE id(mn) = nodeId \
+            and not exists ((u)-[:LIKES]->(mn)) \
+            and not exists ((u)-[:DISLIKES]->(mn)) \
+            RETURN mn, score ORDER BY score DESC LIMIT 40;", this.parameters);
+        }
+        else{
+            return sess.run("match (m:Movie), (u:User {username:$username}) \
+                        where not exists ((u)-[:LIKES]->(m)) \
+                        and not exists ((u)-[:DISLIKES]->(m)) \
                         return m, rand() as rand \
                         order by rand asc limit 40;", this.parameters);
+        }
     }
     remove_recommendations(movies){
         this.parameters["movies"] = movies;
@@ -144,11 +161,11 @@ class Recommend{
         if (flag == 1){
             return sess.run("match (u:User {username:$username}), (m:Movie) \
                             where m.movieid in $movies \
-                            merge (u)-[:LIKES]->(m);", this.parameters);
+                            merge (u)-[:LIKES {exemplarWeight:0.0}]->(m);", this.parameters);
         } else{
             return sess.run("match (u:User {username:$username}), (m:Movie) \
                             where m.movieid in $movies \
-                            merge (u)-[:DISLIKES]->(m);", this.parameters);
+                            merge (u)-[:DISLIKES {exemplarWeight:0.0}]->(m);", this.parameters);
         }
     }
 }
